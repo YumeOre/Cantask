@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Cantask.Core/Cantask.Core.csproj" />
+  <Project Path="Cantask.csproj" />
+  <Project Path="Cantask.Infrastructure/Cantask.Infrastructure.csproj" />
+</Solution>

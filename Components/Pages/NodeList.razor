@@ -2,6 +2,21 @@
 @using Cantask.Models
 @using Cantask.Services
 @inject NodeService NodeService
+@inject DevService DevService
+@inject ProjectService ProjectService
+
+<h3>Seleccionar Proyecto</h3>
+
+<select @onchange="OnProjectChanged">
+    <option value="">Selecciona un proyecto</option>
+
+    @foreach (var project in Projects)
+    {
+        <option value="@project.Id">@project.Name</option>
+    }
+</select>
+
+<hr />
 
 <h3>Lista de Nodos</h3>
 
@@ -10,9 +25,13 @@
     <p style="color:red;">@error</p>
 }
 
-@if (Nodes.Count == 0)
+@if (SelectedProjectIdView == Guid.Empty)
 {
-    <p>No hay nodos aún.</p>
+    <p>Selecciona un proyecto para ver nodos.</p>
+}
+else if (Nodes.Count == 0)
+{
+    <p>No hay nodos en este proyecto.</p>
 }
 else
 {
@@ -30,50 +49,78 @@ else
 
 <h3>Crear Nodo</h3>
 
-<div>
-    <label>Tipo:</label>
-    <select @bind="SelectedType">
-        @foreach (NodeType type in Enum.GetValues(typeof(NodeType)))
-        {
-            <option value="@type">@type</option>
-        }
-    </select>
-</div>
+@if (SelectedProjectIdView == Guid.Empty)
+{
+    <p>Debes seleccionar un proyecto primero.</p>
+}
+else
+{
+    <div>
+        <label>Tipo:</label>
+        <select @bind="SelectedType">
+            @foreach (NodeType type in Enum.GetValues(typeof(NodeType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </div>
 
-<div style="margin-top:10px;">
-    <label>Contenido:</label>
-    <input @bind="NewContent" placeholder="Escribe algo..." />
-</div>
+    <div style="margin-top:10px;">
+        <label>Contenido:</label>
+        <input @bind="NewContent" placeholder="Escribe algo..." />
+    </div>
 
-<div style="margin-top:10px;">
-    <button type="button" @onclick="CrearNodo">Agregar Nodo</button>
-</div>
+    <div style="margin-top:10px;">
+        <button type="button" @onclick="CrearNodo">Agregar Nodo</button>
+    </div>
+}
 
 <p>@mensaje</p>
 
+<button style="background:red; color:white;" @onclick="ResetAll">
+    ⚠ Resetear TODO
+</button>
+
 @code {
     private List<Node> Nodes = new();
+    private List<Project> Projects = new();
 
     private NodeType SelectedType = NodeType.Concept;
     private string NewContent = "";
     private string mensaje = "";
     private string error = "";
 
+    private Guid SelectedProjectIdView = Guid.Empty;
+
     protected override void OnInitialized()
     {
         try
         {
-            CargarNodos();
+            Projects = ProjectService.GetAllProjects();
         }
         catch (Exception ex)
         {
-            error = $"Error al cargar nodos: {ex.Message}";
+            error = $"Error al cargar datos: {ex.Message}";
+        }
+    }
+
+    private void OnProjectChanged(ChangeEventArgs e)
+    {
+        if (Guid.TryParse(e.Value?.ToString(), out var id))
+        {
+            SelectedProjectIdView = id;
+            CargarNodos();
+        }
+        else
+        {
+            SelectedProjectIdView = Guid.Empty;
+            Nodes.Clear();
         }
     }
 
     private void CargarNodos()
     {
-        Nodes = NodeService.GetAllNodes();
+        Nodes = NodeService.GetNodesByProject(SelectedProjectIdView);
     }
 
     private void CrearNodo()
@@ -89,16 +136,13 @@ else
             var node = NodeService.CreateNode(
                 SelectedType,
                 NewContent,
-                Guid.Empty // temporal
+                SelectedProjectIdView
             );
 
             mensaje = $"Nodo creado: {node.Id}";
 
             CargarNodos();
-
             NewContent = "";
-
-            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -106,5 +150,16 @@ else
                 ? ex.InnerException.Message
                 : ex.Message;
         }
-    }   
+    }
+
+    private void ResetAll()
+    {
+        DevService.ClearAllData();
+
+        Nodes.Clear();
+        Projects = ProjectService.GetAllProjects();
+        SelectedProjectIdView = Guid.Empty;
+
+        mensaje = "Sistema reiniciado";
+    }
 }

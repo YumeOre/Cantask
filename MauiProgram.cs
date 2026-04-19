@@ -20,6 +20,8 @@ public static class MauiProgram
         builder.Services.AddMauiBlazorWebView();
         builder.Services.AddScoped<NodeService>();
         builder.Services.AddScoped<RelationshipService>();
+        builder.Services.AddScoped<ProjectService>();
+        builder.Services.AddScoped<DevService>();
 
     #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

@@ -1,0 +1,77 @@
+@page "/projects/{ProjectId:guid}"
+@using Cantask.Models
+@using Cantask.Services
+@inject NodeService NodeService
+@inject ProjectService ProjectService
+
+<h3>Proyecto</h3>
+
+@if (Project == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <h4>@Project.Name</h4>
+    <p>Vitalidad: @Project.Vitality.ToString("0.##")</p>
+    <p>Actividad: @Project.ActivityLevel</p>
+
+    
+}
+
+<hr />
+
+<h3>Nodos</h3>
+
+@if (Nodes.Count == 0)
+{
+    <p>No hay nodos.</p>
+}
+else
+{
+    <ul>
+        @foreach (var node in Nodes)
+        {
+            <li>@node.Type: @node.Content</li>
+        }
+    </ul>
+}
+
+<hr />
+
+<h3>Crear Nodo</h3>
+
+<input @bind="NewContent" placeholder="Contenido..." />
+
+<button @onclick="CrearNodo">Agregar</button>
+
+@code {
+    [Parameter] public Guid ProjectId { get; set; }
+
+    private Project Project;
+    private List<Node> Nodes = new();
+    private string NewContent = "";
+
+    protected override void OnInitialized()
+    {
+        CargarProyecto();
+        CargarNodos();
+    }
+
+    private void CargarProyecto()
+    {
+        Project = ProjectService.GetProject(ProjectId);
+    }
+
+    private void CargarNodos()
+    {
+        Nodes = NodeService.GetNodesByProject(ProjectId);
+    }
+
+    private void CrearNodo()
+    {
+        NodeService.CreateNode(NodeType.Concept, NewContent, ProjectId);
+        CargarNodos();
+        NewContent = "";
+    }
+}

@@ -6,10 +6,12 @@ namespace Cantask.Services
     public class NodeService
     {
         private readonly AppDbContext _context;
+        private readonly ProjectService _projectService;
 
-        public NodeService(AppDbContext context)
+        public NodeService(AppDbContext context, ProjectService projectService)
         {
             _context = context;
+            _projectService = projectService;
         }
 
         public List<Node> GetAllNodes()
@@ -30,12 +32,16 @@ namespace Cantask.Services
                 LastInteraction = now,
                 State = NodeState.Active,
                 UsageFrequency = 1,
-                InfluenceLevel = 0
+                InfluenceLevel = 1
             };
 
             _context.Nodes.Add(node);
             _context.SaveChanges();
 
+            if (node.ProjectId.HasValue)
+            {
+                _projectService.UpdateProjectState(node.ProjectId.Value);
+            }
             return node;
         }
 
@@ -64,6 +70,13 @@ namespace Cantask.Services
         {
             _context.Nodes.Add(node);
             _context.SaveChanges();
+        }
+
+        public List<Node> GetNodesByProject(Guid projectId)
+        {
+            return _context.Nodes
+                .Where(n => n.ProjectId == projectId)
+                .ToList();
         }
     }
 }

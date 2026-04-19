@@ -1,0 +1,96 @@
+@page "/projects"
+@using Cantask.Models
+@using Cantask.Services
+@inject ProjectService ProjectService
+
+<h3>Proyectos</h3>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p style="color:red;">@error</p>
+}
+
+@if (Projects.Count == 0)
+{
+    <p>No hay proyectos aún.</p>
+}
+else
+{
+    <ul>
+        @foreach (Project project in Projects)
+        {
+            <li>
+                <a href="projects/@project.Id">
+                    <strong>@project.Name</strong>
+                </a>
+                | Vitalidad: @project.Vitality.ToString("0.##")
+                | Actividad: @project.ActivityLevel
+                | Crecimiento: @project.GrowthRate
+                | Estado: @project.GetVitalityState()
+            </li>
+        }
+    </ul>
+}
+
+<hr />
+
+<h3>Crear Proyecto</h3>
+
+<input @bind="NewProjectName" placeholder="Nombre del proyecto..." />
+
+<button type="button" @onclick="CrearProyecto">
+    Crear Proyecto
+</button>
+
+<p>@mensaje</p>
+
+@code {
+    private List<Project> Projects = new();
+
+    private string NewProjectName = "";
+    private string mensaje = "";
+    private string error = "";
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            CargarProyectos();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    private void CargarProyectos()
+    {
+        Projects = ProjectService.GetAllProjects();
+    }
+
+    private void CrearProyecto()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(NewProjectName))
+            {
+                mensaje = "El nombre no puede estar vacío.";
+                return;
+            }
+
+            var project = ProjectService.CreateProject(NewProjectName);
+
+            mensaje = $"Proyecto creado: {project.Name}";
+
+            NewProjectName = "";
+
+            CargarProyectos();
+        }
+        catch (Exception ex)
+        {
+            error = ex.InnerException != null
+                ? ex.InnerException.Message
+                : ex.Message;
+        }
+    }
+}

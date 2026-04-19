@@ -1,0 +1,65 @@
+﻿@implements IDisposable
+@inject NavigationManager Nav
+
+@* TOP BAR — CLICK TO MINT *@
+<div class="retro-topbar">
+    <span class="retro-heart">♥</span>
+    <div class="retro-topbar-links">
+        <NavLink href="" Match="NavLinkMatch.All" class="retro-topbar-link" ActiveClass="retro-topbar-link-active">HOME</NavLink>
+        <NavLink href="counter" class="retro-topbar-link" ActiveClass="retro-topbar-link-active">COUNTER</NavLink>
+        <NavLink href="weather" class="retro-topbar-link" ActiveClass="retro-topbar-link-active">WEATHER</NavLink>
+    </div>
+    <span class="retro-topbar-title">CANTASK</span>
+    <div class="retro-topbar-links ml-auto">
+        <RetroButton Variant="ghost">+ NEW</RetroButton>
+        <RetroButton Variant="ghost">⚙</RetroButton>
+    </div>
+    <span class="retro-heart">♥</span>
+</div>
+
+@* TICKER BAR *@
+<div class="retro-ticker-wrap">
+    <div class="retro-ticker-track">
+        @foreach (var item in TickerItems)
+        {
+            <span class="retro-ticker-item">
+                @if (!string.IsNullOrEmpty(item.Icon))
+                {
+                    <span class="retro-ticker-icon">@item.Icon</span>
+                }
+                <span>@item.Text</span>
+            </span>
+        }
+        @* duplicado para loop infinito *@
+        @foreach (var item in TickerItems)
+        {
+            <span class="retro-ticker-item">
+                @if (!string.IsNullOrEmpty(item.Icon))
+                {
+                    <span class="retro-ticker-icon">@item.Icon</span>
+                }
+                <span>@item.Text</span>
+            </span>
+        }
+    </div>
+</div>
+
+@code {
+    record TickerItem(string Text, string Icon = "");
+
+    private List<TickerItem> TickerItems = new()
+    {
+        new("CULTURALLY WANT",  "♥"),
+        new("HOT GARBAGE",      "✦"),
+        new("CRYPTO NATIVE",    "◈"),
+        new("BUY THE TOP",      "☠"),
+        new("NGMI",             "✦"),
+        new("DIAMOND HANDS",    "◆"),
+        new("TO THE MOON",      "●"),
+        new("WAGMI",            "♥"),
+        new("PAPER HANDS",      "✦"),
+        new("PROBABLY NOTHING", "◈"),
+    };
+
+    public void Dispose() { }
+}

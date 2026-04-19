@@ -1,22 +1,27 @@
-﻿<div class="relative bg-[#0f0f0f] p-2 border border-white/40">
-
-    <!-- doble borde -->
-    <div class="absolute inset-0 border border-white/10 pointer-events-none"></div>
-
-    <!-- header -->
-    <div class="text-[10px] tracking-widest border-b border-white/20 pb-1 mb-2 flex items-center gap-2">
-        <span class="opacity-70">▶</span>
-        <span>@Title</span>
-    </div>
-
-    <!-- contenido -->
-    <div class="text-[11px] leading-snug opacity-80">
+﻿<div class="retro-window @Class">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <div class="retro-window-title">
+            <span>@Title</span>
+            @if (ShowControls)
+            {
+                <div class="retro-window-controls">
+                    <span class="retro-dot"></span>
+                    <span class="retro-dot"></span>
+                    <span class="retro-dot"></span>
+                </div>
+            }
+        </div>
+    }
+    <div class="retro-window-body @BodyClass">
         @ChildContent
     </div>
-
 </div>
 
 @code {
-    [Parameter] public string? Title { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public bool ShowControls { get; set; } = true;
+    [Parameter] public string Class { get; set; } = "";
+    [Parameter] public string BodyClass { get; set; } = "";
 }

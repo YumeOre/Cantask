@@ -1,7 +1,17 @@
-﻿<button class="retro-border px-3 py-1 text-xs font-retro hover:bg-white hover:text-black transition">
+﻿<button class="retro-btn @GetVariantClass()" @onclick="OnClick" @attributes="AdditionalAttributes">
     @ChildContent
 </button>
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Variant { get; set; } = "default";
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetVariantClass() => Variant switch
+    {
+        "ghost" => "retro-btn-ghost",
+        "active" => "retro-btn-active",
+        _ => ""
+    };
 }

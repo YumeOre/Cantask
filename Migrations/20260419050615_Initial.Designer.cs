@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cantask.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260419015246_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260419050615_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,17 +38,21 @@ namespace Cantask.Migrations
                     b.Property<DateTime>("LastInteraction")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UsageFrequency")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Nodes");
                 });
@@ -86,13 +90,51 @@ namespace Cantask.Migrations
                     b.Property<Guid>("TargetNodeId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SourceNodeId");
+
+                    b.HasIndex("TargetNodeId");
+
                     b.ToTable("Relationships");
+                });
+
+            modelBuilder.Entity("Cantask.Models.Node", b =>
+                {
+                    b.HasOne("Cantask.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Cantask.Models.Relationship", b =>
+                {
+                    b.HasOne("Cantask.Models.Node", "SourceNode")
+                        .WithMany("OutgoingRelations")
+                        .HasForeignKey("SourceNodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Cantask.Models.Node", "TargetNode")
+                        .WithMany("IncomingRelations")
+                        .HasForeignKey("TargetNodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SourceNode");
+
+                    b.Navigation("TargetNode");
+                });
+
+            modelBuilder.Entity("Cantask.Models.Node", b =>
+                {
+                    b.Navigation("IncomingRelations");
+
+                    b.Navigation("OutgoingRelations");
                 });
 #pragma warning restore 612, 618
         }

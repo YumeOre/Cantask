@@ -1,0 +1,16 @@
+@using Cantask.Models;
+@inject  IJSRuntime JSRuntime
+
+<h3>Visualización del Grafo</h3>
+<div id="cy" style="width: 100%; height: 500px; border: 1px solid black;"></div>
+
+@code {
+    [Parameter] public List<Node> Nodes { get; set; } = new(); // Inicialización con lista vacía
+    [Parameter] public List<Relationship> Relationships { get; set; } = new(); // Inicialización con lista vacía
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Aquí llamaremos a un método JS para renderizar el grafo
+        await JSRuntime.InvokeVoidAsync("renderGraph", Nodes, Relationships);
+    }
+}

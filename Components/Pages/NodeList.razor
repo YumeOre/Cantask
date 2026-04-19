@@ -1,0 +1,110 @@
+@page "/nodes"
+@using Cantask.Models
+@using Cantask.Services
+@inject NodeService NodeService
+
+<h3>Lista de Nodos</h3>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p style="color:red;">@error</p>
+}
+
+@if (Nodes.Count == 0)
+{
+    <p>No hay nodos aún.</p>
+}
+else
+{
+    <ul>
+        @foreach (var node in Nodes)
+        {
+            <li>
+                <strong>@node.Type</strong>: @node.Content
+            </li>
+        }
+    </ul>
+}
+
+<hr />
+
+<h3>Crear Nodo</h3>
+
+<div>
+    <label>Tipo:</label>
+    <select @bind="SelectedType">
+        @foreach (NodeType type in Enum.GetValues(typeof(NodeType)))
+        {
+            <option value="@type">@type</option>
+        }
+    </select>
+</div>
+
+<div style="margin-top:10px;">
+    <label>Contenido:</label>
+    <input @bind="NewContent" placeholder="Escribe algo..." />
+</div>
+
+<div style="margin-top:10px;">
+    <button type="button" @onclick="CrearNodo">Agregar Nodo</button>
+</div>
+
+<p>@mensaje</p>
+
+@code {
+    private List<Node> Nodes = new();
+
+    private NodeType SelectedType = NodeType.Concept;
+    private string NewContent = "";
+    private string mensaje = "";
+    private string error = "";
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            CargarNodos();
+        }
+        catch (Exception ex)
+        {
+            error = $"Error al cargar nodos: {ex.Message}";
+        }
+    }
+
+    private void CargarNodos()
+    {
+        Nodes = NodeService.GetAllNodes();
+    }
+
+    private void CrearNodo()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(NewContent))
+            {
+                mensaje = "El contenido no puede estar vacío.";
+                return;
+            }
+
+            var node = NodeService.CreateNode(
+                SelectedType,
+                NewContent,
+                Guid.Empty // temporal
+            );
+
+            mensaje = $"Nodo creado: {node.Id}";
+
+            CargarNodos();
+
+            NewContent = "";
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            error = ex.InnerException != null
+                ? ex.InnerException.Message
+                : ex.Message;
+        }
+    }   
+}

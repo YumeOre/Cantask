@@ -17,15 +17,32 @@
         <section style="grid-column: span 4;" class="min-h-0">
             <RetroWindow Title="" ShowControls="false" Class="h-full" BodyClass="overflow-hidden p-0 h-full">
                 <div class="retro-breaking-cascade">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        var opacity = Math.Max(0.06, 1.0 - (i * 0.18));
-                        var scale = Math.Max(0.5, 1.0 - (i * 0.1));
-                        <div class="retro-cascade-pair" style="opacity:@opacity.ToString("F2");">
-                            <div class="retro-cascade-small">BREAKING</div>
-                            <div class="retro-cascade-big" style="transform: scaleX(@scale.ToString("F2")); transform-origin: left;">NEWS</div>
-                        </div>
-                    }
+
+                    <div class="retro-cascade-pair" style="opacity:0.12;">
+                        <div class="retro-cascade-small">BREAKING</div>
+                        <RetroCascade Filled="false" />
+                    </div>
+
+                    <div class="retro-cascade-pair" style="opacity:0.28;">
+                        <div class="retro-cascade-small">BREAKING</div>
+                        <RetroCascade Filled="true" />
+                    </div>
+
+                    <div class="retro-cascade-pair" style="opacity:1;">
+                        <div class="retro-cascade-small" style="font-size:9px; color: var(--c-accent);">BREAKING</div>
+                        <RetroCascade Filled="true" />
+                    </div>
+
+                    <div class="retro-cascade-pair" style="opacity:0.28;">
+                        <div class="retro-cascade-small">BREAKING</div>
+                        <RetroCascade Filled="false" />
+                    </div>
+
+                    <div class="retro-cascade-pair" style="opacity:0.12;">
+                        <div class="retro-cascade-small">BREAKING</div>
+                        <RetroCascade Filled="false" />
+                    </div>
+
                 </div>
             </RetroWindow>
         </section>

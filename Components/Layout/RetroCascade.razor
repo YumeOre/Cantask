@@ -1,0 +1,89 @@
+﻿@* 
+    Letras N-E-W-S dibujadas a mano como SVG paths geométricos.
+    Filled=true  → relleno sólido
+    Filled=false → solo contorno
+    Scale: factor de escala (default 1.0)
+*@
+
+<svg class="retro-cascade-svg"
+     viewBox="0 0 460 116"
+     preserveAspectRatio="xMinYMid meet"
+     xmlns="http://www.w3.org/2000/svg">
+
+    @if (Filled)
+    {
+        <g fill="var(--c-accent)" stroke="none">
+            @LetterPaths
+        </g>
+    }
+    else
+    {
+        <g fill="none" stroke="var(--c-accent)" stroke-width="2">
+            @LetterPaths
+        </g>
+    }
+
+</svg>
+
+@code {
+    [Parameter] public bool Filled { get; set; } = true;
+
+    private RenderFragment LetterPaths => __builder =>
+    {
+        __builder.AddMarkupContent(0, @"
+        <!-- N -->
+        <g transform='translate(10,8)'>
+            <!-- Palo izquierdo -->
+            <rect x='0'  y='0' width='14' height='100'/>
+            <!-- Palo derecho -->
+            <rect x='82' y='0' width='14' height='100'/>
+            <!-- Diagonal de arriba-izq a abajo-der -->
+            <polygon points='14,0 34,0 96,100 76,100'/>
+        </g>
+
+        <!-- E -->
+        <g transform='translate(125,8)'>
+            <!-- Palo vertical izquierdo -->
+            <rect x='0' y='0'  width='14' height='100'/>
+            <!-- Barra superior -->
+            <rect x='0' y='0'  width='72' height='14'/>
+            <!-- Barra media (más corta) -->
+            <rect x='0' y='43' width='54' height='14'/>
+            <!-- Barra inferior -->
+            <rect x='0' y='86' width='72' height='14'/>
+        </g>
+
+      <!-- W abierta un poco más desde abajo -->
+<g transform='translate(210,6)'>
+  <!-- Diagonal izquierda más abierta abajo -->
+  <polygon points='0,0 13,0 43,96 28,96'/>
+  
+  <!-- Diagonal derecha más abierta abajo -->
+  <polygon points='110,0 97,0 67,96 82,96'/>
+  
+ <!-- Triángulo central más alto -->
+<polygon points='28,96 82,96 55,30'/>
+
+
+</g>
+
+
+
+
+
+        <!-- S -->
+        <g transform='translate(335,8)'>
+            <!-- Barra superior -->
+            <rect x='0'  y='0'  width='76' height='14'/>
+            <!-- Palo superior izquierdo -->
+            <rect x='0'  y='0'  width='14' height='50'/>
+            <!-- Barra media -->
+            <rect x='0'  y='43' width='76' height='14'/>
+            <!-- Palo inferior derecho -->
+            <rect x='62' y='43' width='14' height='57'/>
+            <!-- Barra inferior -->
+            <rect x='0'  y='86' width='76' height='14'/>
+        </g>
+        ");
+    };
+}

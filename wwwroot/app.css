@@ -156,8 +156,9 @@ html, body {
 }
 
 .retro-ticker-icon {
-    font-size: 14px;
-    opacity: 0.5;
+    font-size: 11px;
+    font-family: 'Press Start 2P', monospace;
+    opacity: 0.6;
 }
 
 @keyframes ticker-scroll {
@@ -214,10 +215,10 @@ html, body {
 .retro-breaking-cascade {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 12px 10px;
+    justify-content: center;
+    padding: 10px 8px;
     height: 100%;
-    gap: 0;
+    gap: 4px;
     overflow: hidden;
 }
 
@@ -596,3 +597,27 @@ html, body {
 .home-dot-filled {
     background: var(--c-accent);
 }
+/* ===================== RETRO CASCADE SVG ===================== */
+.retro-cascade-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.retro-cascade-pair {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.retro-cascade-small {
+    font-size: 7px;
+    letter-spacing: 0.25em;
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.6;
+}
+
+/* Borra estas si las tienes — ya no se usan */
+/* .retro-cascade-word, .cascade-letter, .cascade-space,
+   .cascade-filled, .cascade-outline */

@@ -1,5 +1,113 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<div class="flex min-h-screen items-center justify-center bg-black p-8 font-mono text-[#f5c400]">
 
-Welcome to your new app.
+    <div class="w-full max-w-4xl border border-[#f5c400]/60 bg-black/40 shadow-[0_0_30px_rgba(245,196,0,0.25)] backdrop-blur-md">
+
+        <!-- HEADER -->
+        <div class="flex items-center justify-between border-b border-[#f5c400]/40 p-6">
+            <h1 class="text-lg tracking-[0.4em] uppercase">
+                SYSTEM STATUS
+            </h1>
+
+            <div class="text-xs tracking-[0.3em] opacity-80">
+                ONLINE • 07-07-2000
+            </div>
+        </div>
+
+        <!-- BODY GRID -->
+        <div class="grid grid-cols-2 gap-0 border-b border-[#f5c400]/40">
+
+            <!-- LEFT PANEL -->
+            <div class="border-r border-[#f5c400]/40 p-6">
+                <div class="mb-4 text-xs tracking-[0.3em] uppercase opacity-80">
+                    Cognitive Metrics
+                </div>
+
+                <div class="relative flex h-40 items-center justify-center overflow-hidden border border-[#f5c400]/30">
+                    <svg viewBox="0 0 300 150" class="h-full w-full opacity-80">
+                        <path d="M20,110 C80,20 130,140 200,60 C240,20 260,40 280,30"
+                              fill="none"
+                              stroke="rgba(245,196,0,0.85)"
+                              stroke-width="2" />
+                        <circle cx="280" cy="30" r="4" fill="rgba(245,196,0,1)" />
+                    </svg>
+
+                    <!-- Corner brackets -->
+                    <div class="absolute top-2 left-2 h-4 w-4 border-t border-l border-[#f5c400]/70"></div>
+                    <div class="absolute top-2 right-2 h-4 w-4 border-t border-r border-[#f5c400]/70"></div>
+                    <div class="absolute bottom-2 left-2 h-4 w-4 border-b border-l border-[#f5c400]/70"></div>
+                    <div class="absolute right-2 bottom-2 h-4 w-4 border-r border-b border-[#f5c400]/70"></div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="p-6">
+                <div class="mb-4 text-xs tracking-[0.3em] uppercase opacity-80">
+                    Biometric Scan
+                </div>
+
+                <div class="relative flex h-40 items-center justify-center overflow-hidden border border-[#f5c400]/30">
+                    <div class="relative flex h-28 w-28 items-center justify-center rounded-full border border-[#f5c400]/60">
+                        <div class="h-16 w-16 rounded-full border border-[#f5c400]/50"></div>
+                        <div class="h-2 w-2 rounded-full bg-[#f5c400] shadow-[0_0_20px_rgba(245,196,0,0.7)]"></div>
+
+                        <div class="absolute h-[1px] w-full bg-[#f5c400]/60"></div>
+                        <div class="absolute h-full w-[1px] bg-[#f5c400]/60"></div>
+                    </div>
+
+                    <!-- Corner brackets -->
+                    <div class="absolute top-2 left-2 h-4 w-4 border-t border-l border-[#f5c400]/70"></div>
+                    <div class="absolute top-2 right-2 h-4 w-4 border-t border-r border-[#f5c400]/70"></div>
+                    <div class="absolute bottom-2 left-2 h-4 w-4 border-b border-l border-[#f5c400]/70"></div>
+                    <div class="absolute right-2 bottom-2 h-4 w-4 border-r border-b border-[#f5c400]/70"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- INFO BLOCK -->
+        <div class="border-b border-[#f5c400]/40 p-6">
+            <div class="space-y-2 border border-[#f5c400]/40 p-5 text-sm tracking-widest">
+
+                <div class="flex">
+                    <span class="w-52 opacity-80">NAME............</span>
+                    <span>CANTASK SYSTEM</span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-52 opacity-80">VERSION.........</span>
+                    <span>.NET 10 / MAUI BLAZOR</span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-52 opacity-80">STATUS..........</span>
+                    <span class="text-green-400">RUNNING</span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-52 opacity-80">THREAT RATING...</span>
+                    <span>LEVEL 4 (HIGH)</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="flex items-center justify-between p-6">
+
+            <button class="border border-[#f5c400]/60 px-5 py-2 text-xs tracking-[0.3em] uppercase transition hover:bg-[#f5c400]/20">
+                Access Panel
+            </button>
+
+            <div class="flex gap-4">
+                <div class="h-5 w-5 rounded-full border border-[#f5c400]/60"></div>
+                <div class="h-5 w-5 rounded-full border border-[#f5c400]/60"></div>
+                <div class="h-5 w-5 rounded-full border border-[#f5c400]/60 bg-[#f5c400]/40"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

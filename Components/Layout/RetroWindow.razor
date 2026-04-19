@@ -1,0 +1,22 @@
+﻿<div class="relative bg-[#0f0f0f] p-2 border border-white/40">
+
+    <!-- doble borde -->
+    <div class="absolute inset-0 border border-white/10 pointer-events-none"></div>
+
+    <!-- header -->
+    <div class="text-[10px] tracking-widest border-b border-white/20 pb-1 mb-2 flex items-center gap-2">
+        <span class="opacity-70">▶</span>
+        <span>@Title</span>
+    </div>
+
+    <!-- contenido -->
+    <div class="text-[11px] leading-snug opacity-80">
+        @ChildContent
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

@@ -1,17 +1,57 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<div class="h-screen p-3 text-accent font-retro">
+    
+    <!-- HEADER -->
+    <div class="retro-border mb-3 p-2 flex justify-between items-center">
+        <div class="flex gap-4 text-xs">
+            <span>VIRAL</span>
+            <span>HOT</span>
+            <span>CRYPTO</span>
+            <span>BUY</span>
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <RetroButton>CLICK TO MINT</RetroButton>
+    </div>
+
+    <!-- GRID PRINCIPAL -->
+    <div class="grid grid-cols-12 gap-[6px] h-full">
+
+        <!-- LEFT -->
+        <div class="col-span-6">
+            <RetroWindow Title="PORTAL">
+                <p class="text-[10px] opacity-70">
+                    THE NIFTY PORTAL IS AN NFT ART PIECE DESIGNED...
+                </p>
+            </RetroWindow>
+        </div>
+
+        <!-- CENTER -->
+        <div class="col-span-4 flex flex-col gap-[6px]">
+            <RetroWindow Title="BREAKING NEWS">
+                <div class="leading-none">
+                    <div class="text-xl tracking-widest opacity-50">BREAKING</div>
+                    <div class="text-3xl font-bold">NEWS</div>
+                    <div class="text-xl opacity-30">BREAKING</div>
+                </div>
+            </RetroWindow>
+
+            <RetroWindow Title="NOTES.txt">
+                <p class="text-[10px] opacity-60">
+                    reprehenderit in voluptate velit esse...
+                </p>
+
+                <div class="flex gap-2 mt-2">
+                    <RetroButton>Link 1</RetroButton>
+                    <RetroButton>Link 2</RetroButton>
+                </div>
+            </RetroWindow>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-span-2">
+            <RetroSidebar />
+        </div>
+
+    </div>
 </div>

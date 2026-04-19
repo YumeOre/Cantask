@@ -1,0 +1,7 @@
+﻿<button class="retro-border px-3 py-1 text-xs font-retro hover:bg-white hover:text-black transition">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

@@ -1,89 +1,76 @@
-﻿@* 
-    Letras N-E-W-S dibujadas a mano como SVG paths geométricos.
+﻿@*
+    NEWS con paths SVG exactos de la fuente original.
     Filled=true  → relleno sólido
-    Filled=false → solo contorno
-    Scale: factor de escala (default 1.0)
+    Filled=false → solo contorno outline
 *@
 
 <svg class="retro-cascade-svg"
-     viewBox="0 0 460 116"
+     viewBox="0 0 419.30 100"
      preserveAspectRatio="xMinYMid meet"
      xmlns="http://www.w3.org/2000/svg">
 
-    @if (Filled)
-    {
-        <g fill="var(--c-accent)" stroke="none">
-            @LetterPaths
+    <g fill="@(Filled ? "var(--c-accent)" : "none")"
+           stroke="@(Filled ? "none" : "var(--c-accent)")"
+           stroke-width="@(Filled ? "0" : "90")">
+
+        <!-- N: x=0 -->
+        <g transform="translate(0, 100) scale(0.042735, -0.042735)">
+            <path d="M1247 2270 c44 -9 83 -26 131 -59 94 -63 146 -125 193 -231 l24 -55 5
+            -623 c5 -603 6 -624 24 -638 20 -14 50 -11 74 8 9 8 12 179 12 792 0 652 2
+            785 14 801 13 18 28 19 216 19 173 -1 204 -3 218 -18 15 -15 16 -89 15 -853
+            -1 -876 -3 -925 -45 -1007 -37 -72 -95 -142 -163 -195 -89 -70 -155 -85 -350
+            -78 -160 5 -193 16 -288 90 -94 73 -147 158 -177 284 -20 83 -20 113 -19 680
+            1 554 0 596 -17 614 -16 18 -33 19 -319 19 -244 0 -305 -3 -321 -14 -19 -14
+            -19 -35 -20 -832 -1 -780 -2 -818 -19 -831 -14 -10 -65 -13 -202 -13 -170 0
+            -184 1 -203 20 -20 20 -20 33 -20 1055 l0 1036 23 22 22 22 565 -1 c415 -1
+            582 -4 627 -14z" />
         </g>
-    }
-    else
-    {
-        <g fill="none" stroke="var(--c-accent)" stroke-width="2">
-            @LetterPaths
+
+        <!-- E: x=104.15 -->
+        <g transform="translate(95, 100) scale(0.042735, -0.042735)">
+            <path d="M2231 2261 c17 -21 19 -41 19 -196 0 -168 -7 -221 -33 -237 -7 -4 -361
+            -8 -788 -8 -605 0 -779 -3 -791 -12 -22 -18 -28 -54 -13 -75 13 -17 52 -18
+            642 -23 555 -4 631 -7 658 -21 17 -9 44 -20 62 -23 30 -7 129 -85 164 -130 52
+            -68 99 -230 99 -341 0 -80 -26 -192 -62 -265 -45 -93 -103 -150 -198 -195 -76
+            -35 -88 -37 -222 -46 -79 -5 -363 -8 -632 -7 l-489 1 -19 -23 c-19 -23 -17
+            -53 6 -77 8 -10 192 -13 798 -13 724 -1 787 -3 801 -18 22 -25 23 -366 1 -400
+            l-15 -23 -917 3 c-1041 4 -967 -3 -1072 89 -69 60 -111 132 -141 241 -33 120
+            -34 190 -4 308 54 213 142 305 339 357 89 23 94 23 664 23 376 0 580 4 593 10
+            27 15 24 56 -5 75 -20 14 -95 16 -589 15 -442 0 -583 3 -644 14 -219 40 -355
+            210 -378 472 -17 188 80 397 223 481 110 65 167 68 1245 68 l679 0 19 -24z" />
         </g>
-    }
+
+        <!-- W: x=211.30 -->
+        <g transform="translate(195, 100) scale(0.042735, -0.042735)">
+            <path d="M1275 2270 c135 -23 282 -142 351 -285 l39 -80 3 -654 c2 -451 6 -659
+            14 -668 6 -7 25 -13 43 -13 28 0 35 5 44 30 7 20 10 301 11 843 0 712 2 814
+            16 827 12 12 48 15 197 15 197 0 234 -6 246 -39 4 -11 7 -484 5 -1051 l-2
+            -1029 -22 -18 c-21 -17 -56 -18 -501 -18 -466 0 -480 1 -499 20 -20 20 -20 33
+            -20 828 0 444 -4 812 -8 818 -15 24 -50 26 -71 5 -21 -21 -21 -28 -21 -830 0
+            -723 -2 -811 -16 -825 -14 -14 -72 -16 -494 -16 -503 0 -525 2 -535 44 -3 12
+            -4 481 -3 1042 3 989 4 1023 22 1043 18 20 28 21 222 21 203 0 204 0 219 -24
+            14 -20 15 -118 14 -833 -1 -593 2 -816 10 -832 13 -24 48 -28 77 -7 18 14 19
+            36 24 678 l5 663 37 72 c21 39 41 73 45 75 4 1 20 20 35 40 28 37 85 79 167
+            126 79 44 207 56 346 32z" />
+        </g>
+
+        <!-- S: x=318.44 -->
+        <g transform="translate(295, 100) scale(0.042735, -0.042735)">
+            <path d="M2240 2270 c19 -10 20 -20 20 -221 l0 -209 -26 -10 c-16 -6 -322 -10
+            -804 -10 -694 0 -780 -2 -794 -16 -17 -16 -20 -42 -8 -60 21 -32 50 -34 653
+            -34 l602 0 66 -26 c139 -56 225 -144 286 -297 l25 -65 -3 -418 c-3 -396 -4
+            -422 -24 -474 -28 -75 -72 -138 -141 -201 -112 -102 -16 -94 -1063 -97 -830
+            -2 -918 -1 -933 13 -14 14 -16 45 -16 204 0 163 2 190 17 202 13 12 161 15
+            836 19 l821 5 20 35 c20 33 21 48 19 310 -2 251 -4 277 -21 300 l-19 25 -639
+            5 c-416 4 -649 9 -669 16 -95 34 -219 113 -240 153 -7 15 -21 33 -29 40 -24
+            20 -73 129 -85 189 -22 107 -8 266 29 327 10 17 21 41 25 55 11 36 83 117 135
+            153 85 59 133 78 227 90 121 16 1703 13 1733 -3z" />
+        </g>
+
+    </g>
 
 </svg>
 
 @code {
     [Parameter] public bool Filled { get; set; } = true;
-
-    private RenderFragment LetterPaths => __builder =>
-    {
-        __builder.AddMarkupContent(0, @"
-        <!-- N -->
-        <g transform='translate(10,8)'>
-            <!-- Palo izquierdo -->
-            <rect x='0'  y='0' width='14' height='100'/>
-            <!-- Palo derecho -->
-            <rect x='82' y='0' width='14' height='100'/>
-            <!-- Diagonal de arriba-izq a abajo-der -->
-            <polygon points='14,0 34,0 96,100 76,100'/>
-        </g>
-
-        <!-- E -->
-        <g transform='translate(125,8)'>
-            <!-- Palo vertical izquierdo -->
-            <rect x='0' y='0'  width='14' height='100'/>
-            <!-- Barra superior -->
-            <rect x='0' y='0'  width='72' height='14'/>
-            <!-- Barra media (más corta) -->
-            <rect x='0' y='43' width='54' height='14'/>
-            <!-- Barra inferior -->
-            <rect x='0' y='86' width='72' height='14'/>
-        </g>
-
-      <!-- W abierta un poco más desde abajo -->
-<g transform='translate(210,6)'>
-  <!-- Diagonal izquierda más abierta abajo -->
-  <polygon points='0,0 13,0 43,96 28,96'/>
-  
-  <!-- Diagonal derecha más abierta abajo -->
-  <polygon points='110,0 97,0 67,96 82,96'/>
-  
- <!-- Triángulo central más alto -->
-<polygon points='28,96 82,96 55,30'/>
-
-
-</g>
-
-
-
-
-
-        <!-- S -->
-        <g transform='translate(335,8)'>
-            <!-- Barra superior -->
-            <rect x='0'  y='0'  width='76' height='14'/>
-            <!-- Palo superior izquierdo -->
-            <rect x='0'  y='0'  width='14' height='50'/>
-            <!-- Barra media -->
-            <rect x='0'  y='43' width='76' height='14'/>
-            <!-- Palo inferior derecho -->
-            <rect x='62' y='43' width='14' height='57'/>
-            <!-- Barra inferior -->
-            <rect x='0'  y='86' width='76' height='14'/>
-        </g>
-        ");
-    };
 }

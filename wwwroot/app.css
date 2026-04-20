@@ -216,33 +216,34 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px 8px;
+    padding: 8px 6px;
     height: 100%;
-    gap: 4px;
+    gap: 0;
     overflow: hidden;
 }
 
 .retro-cascade-pair {
     display: flex;
     flex-direction: column;
-    line-height: 1;
+    flex: 1;
+    min-height: 0;
 }
 
 .retro-cascade-small {
     font-size: 7px;
     letter-spacing: 0.25em;
     font-family: 'Share Tech Mono', monospace;
-    line-height: 1.6;
+    line-height: 1.4;
+    flex-shrink: 0;
 }
 
-.retro-cascade-big {
-    font-size: clamp(24px, 4.5vw, 52px);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    font-family: 'Share Tech Mono', monospace;
-    line-height: 0.85;
+.retro-cascade-svg {
     display: block;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
 }
+
 
 /* ===================== SIDEBAR ===================== */
 .retro-circle {

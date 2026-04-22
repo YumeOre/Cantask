@@ -1,14 +1,14 @@
-﻿<div class="retro-window @Class">
+﻿<div class="retro-window @Class" style="@Style">
     @if (!string.IsNullOrEmpty(Title) || ShowControls)
     {
         <div class="retro-window-title">
             <span>@Title</span>
             @if (ShowControls)
             {
-                <div class="retro-window-controls">
+                <div class="retro-window-controls" @onmousedown:stopPropagation="true">
                     <RetroWindowButton Variant="minimize" />
                     <RetroWindowButton Variant="maximize" />
-                    <RetroWindowButton Variant="close" />
+                    <RetroWindowButton Variant="close" OnClick="HandleClose" />
                 </div>
             }
         </div>
@@ -24,4 +24,11 @@
     [Parameter] public bool ShowControls { get; set; } = true;
     [Parameter] public string Class { get; set; } = "";
     [Parameter] public string BodyClass { get; set; } = "";
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string Style { get; set; } = "";
+    private async Task HandleClose()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
 }

@@ -1,9 +1,10 @@
 ﻿@inject WindowService WinSvc
 @implements IDisposable
 
+@* Solo flotantes — Left lo maneja MainLayout *@
 @foreach (var win in WinSvc.Windows.Where(w => w.IsFloating))
 {
-    <FloatingWindow Model="win" OnDragEnd="HandleDragEnd" />
+    <FloatingWindow Model="win" OnDragComplete="HandleDragComplete" />
 }
 
 @code {
@@ -13,11 +14,10 @@
     public void Dispose()
         => WinSvc.OnChange -= StateHasChanged;
 
-    private Task HandleDragEnd((int id, double x, double y) args)
+    private Task HandleDragComplete((int id, double x, double y) args)
     {
         var (id, x, y) = args;
 
-        // Snap zones — ajusta estos valores a tu resolución
         if (x > 580 && x < 950)
             WinSvc.DockWindow(id, DockZone.Center);
         else if (x >= 950 && y < 300)

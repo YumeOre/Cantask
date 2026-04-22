@@ -1,5 +1,9 @@
-﻿window.dragInterop = {
+﻿console.log('[drag.js] cargado correctamente');
+
+window.dragInterop = {
     startDrag: function (dotnet, startX, startY, winX, winY) {
+        console.log('[drag.js] startDrag llamado', startX, startY);
+
         const onMove = (e) => {
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;

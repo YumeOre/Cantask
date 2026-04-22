@@ -5,29 +5,31 @@
 <div class="cantask-shell crt">
 
     <NavBar />
+    <div style="position: absolute; inset: 0; pointer-events: none; z-index: 500;">
+        <WindowManager />
+    </div>
 
     <main class="cantask-grid" style="position:relative;">
 
-        @* LEFT — ventanas dockeadas *@
-        <section style="grid-column: span 6;" class="min-h-0 flex flex-col gap-[5px]">
+        @* LEFT *@
+        <section style="grid-column: span 6; position: relative; min-height: 0; overflow: hidden;">
+
+            <RetroWindow Title="// PORTAL" Class="h-full" BodyClass="overflow-y-auto" ShowControls="false">
+                @Body
+            </RetroWindow>
+
+            @* Solo ventanas Zone.Left — no flotantes *@
             @{
-                var leftWins = WinSvc.Windows.Where(w => w.Zone == DockZone.Left).ToList();
+                var leftWins = WinSvc.Windows
+                    .Where(w => w.Zone == DockZone.Left)
+                    .ToList();
             }
-            @if (leftWins.Count == 0)
+            @for (int i = 0; i < leftWins.Count; i++)
             {
-                <RetroWindow Title="// PORTAL" Class="h-full" BodyClass="overflow-y-auto h-full">
-                    @Body
-                </RetroWindow>
+                var win = leftWins[i];
+                <FloatingWindow Model="win" OnDragComplete="HandleDragComplete" />
             }
-            else
-            {
-                @foreach (var win in leftWins)
-                {
-                    <RetroWindow Title="@win.Title" Class="flex-1" BodyClass="overflow-y-auto">
-                        <p class="text-[9px] opacity-40">// @win.Title</p>
-                    </RetroWindow>
-                }
-            }
+
         </section>
 
         @* CENTER *@
@@ -144,4 +146,15 @@
 
     public void Dispose()
         => WinSvc.OnChange -= StateHasChanged;
+
+    private Task HandleDragComplete((int id, double x, double y) args)
+    {
+        var (id, x, y) = args;
+
+        // Obtener bounds de la sección left (aprox col 6 de 12)
+        // Si sale del left, pasamos a WindowManager para snap
+        // Por ahora solo dejamos que WindowManager lo maneje
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
 }

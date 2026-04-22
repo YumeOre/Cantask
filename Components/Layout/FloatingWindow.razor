@@ -1,6 +1,6 @@
 ﻿@inject WindowService WinSvc
 @inject IJSRuntime JS
-@implements IDisposable
+@implements IAsyncDisposable
 
 <div class="float-win @(Model.IsFloating ? "float-win-floating" : "float-win-docked")"
      style="@PositionStyle">
@@ -29,42 +29,60 @@
     [Parameter] public EventCallback<(int id, double x, double y)> OnDragComplete { get; set; }
 
     private DotNetObjectReference<FloatingWindow>? _selfRef;
-
+    private double _pendingStartX, _pendingStartY;
+    private bool _pendingDrag = false;
+    private string PositionStyle => Model.IsFloating
+    ? $"position:absolute; left:{Model.X}px; top:{Model.Y}px; width:{Model.Width}px; height:{Model.Height}px; z-index:1000;"
+    : $"position:absolute; top:{20 + (Model.Id - 1) * 30}px; left:20px; width:340px; height:160px; z-index:{10 + Model.Id};";
     protected override void OnInitialized()
     {
         _selfRef = DotNetObjectReference.Create(this);
     }
 
-    private string PositionStyle => Model.IsFloating
-        ? $"left:{Model.X}px; top:{Model.Y}px; width:{Model.Width}px; height:{Model.Height}px;"
-        : "";
+    private async Task HandleTitleMouseDown(MouseEventArgs e)
+    {
+        await JS.InvokeVoidAsync("console.log", $"[DRAG] click en ventana {Model.Id}");
 
-        private async Task HandleTitleMouseDown(MouseEventArgs e)
+        if (!Model.IsFloating)
         {
-            // Esto sí se ve en cualquier consola del navegador
-            await JS.InvokeVoidAsync("console.log", $"[DRAG] click en ventana {Model.Id}");
+            // 1. Guardar coords para usarlas DESPUÉS del re-render
+            _pendingStartX = e.ClientX;
+            _pendingStartY = e.ClientY;
+            _pendingDrag = true;
 
-            if (!Model.IsFloating)
-                WinSvc.FloatWindow(Model.Id, e.ClientX - 10, e.ClientY - 10);
-
-            try
-            {
-                await JS.InvokeVoidAsync("dragInterop.startDrag",
-                    _selfRef,
-                    e.ClientX, e.ClientY,
-                    Model.X, Model.Y);
-                await JS.InvokeVoidAsync("console.log", "[DRAG] JS OK");
-            }
-            catch (Exception ex)
-            {
-                await JS.InvokeVoidAsync("console.error", $"[DRAG ERROR] {ex.Message}");
-            }
+            // 2. Esto dispara re-render
+            WinSvc.FloatWindow(Model.Id, e.ClientX - 10, e.ClientY - 10);
+            return; // 👈 salir aquí, el drag se inicia en OnAfterRenderAsync
         }
 
-    private async Task HandleClose()
+        // Si ya es floating, iniciar drag directo
+        await StartDrag(e.ClientX, e.ClientY);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JS.InvokeVoidAsync("console.log", $"close clicked {Model.Id}");
-        WinSvc.CloseWindow(Model.Id);
+        // 3. Aquí el componente ya re-renderizó y _selfRef es válido
+        if (_pendingDrag)
+        {
+            _pendingDrag = false;
+            await StartDrag(_pendingStartX, _pendingStartY);
+        }
+    }
+
+    private async Task StartDrag(double clientX, double clientY)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("dragInterop.startDrag",
+                _selfRef,           // ✅ ahora sí es el ref válido
+                clientX, clientY,
+                Model.X, Model.Y);
+            await JS.InvokeVoidAsync("console.log", "[DRAG] JS OK");
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("console.error", $"[DRAG ERROR] {ex.Message}");
+        }
     }
 
     [JSInvokable]
@@ -82,9 +100,22 @@
         StateHasChanged();
     }
 
-    public void Dispose()
+    private async Task HandleClose()
     {
-        _selfRef?.Dispose();
+        await JS.InvokeVoidAsync("console.log", $"close clicked {Model.Id}");
+        WinSvc.CloseWindow(Model.Id);
     }
 
+    // 👇 IAsyncDisposable para limpiar JS también
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("dragInterop.cleanup");
+        }
+        catch { }
+
+        _selfRef?.Dispose();
+        _selfRef = null;
+    }
 }

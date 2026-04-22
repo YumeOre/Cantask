@@ -1,0 +1,25 @@
+﻿<span class="retro-win-btn retro-win-btn-@Variant"
+      @onclick="HandleClick"
+      @onclick:stopPropagation="true"
+      @onmousedown:stopPropagation="true"
+      title="@Variant">
+    @Symbol
+</span>
+
+@code {
+    [Parameter] public string Variant { get; set; } = "close";
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    private string Symbol => Variant switch
+    {
+        "minimize" => "_",
+        "maximize" => "□",
+        "close" => "×",
+        _ => "×"
+    };
+
+    private async Task HandleClick()
+    {
+        await OnClick.InvokeAsync();
+    }
+}

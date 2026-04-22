@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using Cantask.Services;
 namespace Cantask;
 
 public static class MauiProgram
@@ -15,12 +15,19 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddMauiBlazorWebView();
+		builder.Services.AddSingleton<Cantask.Services.WindowService>();
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
+        Microsoft.Maui.Handlers.WebViewHandler.Mapper.AppendToMapping("Inspect", (handler, view) =>
+        {
+#if WINDOWS
+    handler.PlatformView.CoreWebView2.Settings.AreDevToolsEnabled = true;
+#endif
+        });
 #endif
 
-		return builder.Build();
+        return builder.Build();
 	}
 }

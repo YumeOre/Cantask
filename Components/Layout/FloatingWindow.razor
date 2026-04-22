@@ -1,0 +1,90 @@
+﻿@inject WindowService WinSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div class="float-win @(Model.IsFloating ? "float-win-floating" : "float-win-docked")"
+     style="@PositionStyle">
+
+    <div class="retro-window h-full flex flex-col">
+
+        <div class="retro-window-title float-win-titlebar"
+             @onmousedown="HandleTitleMouseDown">
+            <span class="text-[8px] tracking-widest">@Model.Title</span>
+            <div class="retro-window-controls" @onmousedown:stopPropagation="true">
+                <RetroWindowButton Variant="minimize" />
+                <RetroWindowButton Variant="maximize" />
+                <RetroWindowButton Variant="close" OnClick="HandleClose" />
+            </div>
+        </div>
+
+        <div class="retro-window-body flex-1 overflow-y-auto">
+            <p class="text-[9px] opacity-40">// @Model.Title</p>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter] public WindowModel Model { get; set; } = default!;
+    [Parameter] public EventCallback<(int id, double x, double y)> OnDragComplete { get; set; }
+
+    private DotNetObjectReference<FloatingWindow>? _selfRef;
+
+    protected override void OnInitialized()
+    {
+        _selfRef = DotNetObjectReference.Create(this);
+    }
+
+    private string PositionStyle => Model.IsFloating
+        ? $"left:{Model.X}px; top:{Model.Y}px; width:{Model.Width}px; height:{Model.Height}px;"
+        : "";
+
+        private async Task HandleTitleMouseDown(MouseEventArgs e)
+        {
+            // Esto sí se ve en cualquier consola del navegador
+            await JS.InvokeVoidAsync("console.log", $"[DRAG] click en ventana {Model.Id}");
+
+            if (!Model.IsFloating)
+                WinSvc.FloatWindow(Model.Id, e.ClientX - 10, e.ClientY - 10);
+
+            try
+            {
+                await JS.InvokeVoidAsync("dragInterop.startDrag",
+                    _selfRef,
+                    e.ClientX, e.ClientY,
+                    Model.X, Model.Y);
+                await JS.InvokeVoidAsync("console.log", "[DRAG] JS OK");
+            }
+            catch (Exception ex)
+            {
+                await JS.InvokeVoidAsync("console.error", $"[DRAG ERROR] {ex.Message}");
+            }
+        }
+
+    private async Task HandleClose()
+    {
+        await JS.InvokeVoidAsync("console.log", $"close clicked {Model.Id}");
+        WinSvc.CloseWindow(Model.Id);
+    }
+
+    [JSInvokable]
+    public void OnDragMove(double x, double y)
+    {
+        WinSvc.UpdatePosition(Model.Id, x, y);
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public async Task OnDragEnd(double x, double y)
+    {
+        WinSvc.UpdatePosition(Model.Id, x, y);
+        await OnDragComplete.InvokeAsync((Model.Id, x, y));
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _selfRef?.Dispose();
+    }
+
+}

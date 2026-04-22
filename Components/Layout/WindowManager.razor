@@ -1,0 +1,31 @@
+﻿@inject WindowService WinSvc
+@implements IDisposable
+
+@foreach (var win in WinSvc.Windows.Where(w => w.IsFloating))
+{
+    <FloatingWindow Model="win" OnDragEnd="HandleDragEnd" />
+}
+
+@code {
+    protected override void OnInitialized()
+        => WinSvc.OnChange += StateHasChanged;
+
+    public void Dispose()
+        => WinSvc.OnChange -= StateHasChanged;
+
+    private Task HandleDragEnd((int id, double x, double y) args)
+    {
+        var (id, x, y) = args;
+
+        // Snap zones — ajusta estos valores a tu resolución
+        if (x > 580 && x < 950)
+            WinSvc.DockWindow(id, DockZone.Center);
+        else if (x >= 950 && y < 300)
+            WinSvc.DockWindow(id, DockZone.RightTop);
+        else if (x >= 950 && y >= 300)
+            WinSvc.DockWindow(id, DockZone.RightBottom);
+
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

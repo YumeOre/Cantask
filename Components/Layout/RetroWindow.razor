@@ -1,14 +1,14 @@
 ﻿<div class="retro-window @Class">
-    @if (!string.IsNullOrEmpty(Title))
+    @if (!string.IsNullOrEmpty(Title) || ShowControls)
     {
         <div class="retro-window-title">
             <span>@Title</span>
             @if (ShowControls)
             {
                 <div class="retro-window-controls">
-                    <span class="retro-dot"></span>
-                    <span class="retro-dot"></span>
-                    <span class="retro-dot"></span>
+                    <RetroWindowButton Variant="minimize" />
+                    <RetroWindowButton Variant="maximize" />
+                    <RetroWindowButton Variant="close" />
                 </div>
             }
         </div>

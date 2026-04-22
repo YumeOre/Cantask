@@ -1,5 +1,6 @@
 ﻿@implements IDisposable
 @inject NavigationManager Nav
+@inject WindowService WinSvc
 
 @* TOP BAR — CLICK TO MINT *@
 <div class="retro-topbar">
@@ -11,7 +12,7 @@
     </div>
     <span class="retro-topbar-title">CANTASK</span>
     <div class="retro-topbar-links ml-auto">
-        <RetroButton Variant="ghost">+ NEW</RetroButton>
+        <RetroButton Variant="ghost" OnClick="() => WinSvc.OpenWindow()">+ NEW</RetroButton>
         <RetroButton Variant="ghost">⚙</RetroButton>
     </div>
     <span class="retro-heart">♥</span>
@@ -49,16 +50,16 @@
 
     private List<TickerItem> TickerItems = new()
 {
-    new("CULTURALLY WANT",  "♥"),
-    new("HOT GARBAGE",      "◆"),
-    new("CRYPTO NATIVE",    "◈"),
-    new("BUY THE TOP",      "☠"),
-    new("NGMI",             "▲"),
-    new("DIAMOND HANDS",    "◆"),
-    new("TO THE MOON",      "●"),
-    new("WAGMI",            "♥"),
-    new("PAPER HANDS",      "■"),
-    new("PROBABLY NOTHING", "◈"),
+    new("INSTALA",  "♥"),
+    new("VISUAL",      "◆"),
+    new("STUDIO",    "◈"),
+    new("2026",      "☠"),
+    new("INSTALA",             "▲"),
+    new("VISUAL",    "◆"),
+    new("STUDIO",      "●"),
+    new("2026",            "♥"),
+    new(":v",      "■"),
+    new("DUN VIVE", "◈"),
 };
 
     public void Dispose() { }

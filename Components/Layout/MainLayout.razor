@@ -1,54 +1,126 @@
 ﻿@inherits LayoutComponentBase
+@inject WindowService WinSvc
+@implements IDisposable
 
 <div class="cantask-shell crt">
 
     <NavBar />
 
-    <main class="cantask-grid">
+    <main class="cantask-grid" style="position:relative;">
 
-        @* LEFT — página actual *@
-        <section style="grid-column: span 6;" class="min-h-0">
-            <RetroWindow Title="// PORTAL" Class="h-full" BodyClass="overflow-y-auto h-full">
-                @Body
-            </RetroWindow>
+        @* LEFT — ventanas dockeadas *@
+        <section style="grid-column: span 6;" class="min-h-0 flex flex-col gap-[5px]">
+            @{
+                var leftWins = WinSvc.Windows.Where(w => w.Zone == DockZone.Left).ToList();
+            }
+            @if (leftWins.Count == 0)
+            {
+                <RetroWindow Title="// PORTAL" Class="h-full" BodyClass="overflow-y-auto h-full">
+                    @Body
+                </RetroWindow>
+            }
+            else
+            {
+                @foreach (var win in leftWins)
+                {
+                    <RetroWindow Title="@win.Title" Class="flex-1" BodyClass="overflow-y-auto">
+                        <p class="text-[9px] opacity-40">// @win.Title</p>
+                    </RetroWindow>
+                }
+            }
         </section>
 
-        @* CENTER — Breaking News *@
+        @* CENTER *@
         <section style="grid-column: span 4;" class="min-h-0">
-            <RetroWindow Title="" ShowControls="false" Class="h-full" BodyClass="overflow-hidden p-0 h-full">
-                <div class="retro-breaking-cascade">
-                    <div class="retro-cascade-pair" style="opacity:0.10;">
-                        <div class="retro-cascade-small">BREAKING</div>
-                        <RetroCascade Filled="false" />
+            @{
+                var centerWin = WinSvc.Windows.FirstOrDefault(w => w.Zone == DockZone.Center);
+            }
+            @if (centerWin is not null)
+            {
+                <RetroWindow Title="@centerWin.Title" Class="h-full" BodyClass="overflow-y-auto h-full">
+                    <p class="text-[9px] opacity-40">// @centerWin.Title</p>
+                </RetroWindow>
+            }
+            else
+            {
+                <RetroWindow Title="" ShowControls="false" Class="h-full" BodyClass="overflow-hidden p-0 h-full">
+                    <div class="retro-breaking-cascade">
+                        <div class="retro-cascade-pair" style="opacity:0.10;">
+                            <div class="retro-cascade-small">BREAKING</div>
+                            <RetroCascade Filled="false" />
+                        </div>
+                        <div class="retro-cascade-pair" style="opacity:0.22;">
+                            <div class="retro-cascade-small">BREAKING</div>
+                            <RetroCascade Filled="false" />
+                        </div>
+                        <div class="retro-cascade-pair" style="opacity:1;">
+                            <div class="retro-cascade-small">BREAKING</div>
+                            <RetroCascade Filled="true" />
+                        </div>
+                        <div class="retro-cascade-pair" style="opacity:0.22;">
+                            <div class="retro-cascade-small">BREAKING</div>
+                            <RetroCascade Filled="false" />
+                        </div>
+                        <div class="retro-cascade-pair" style="opacity:0.10;">
+                            <div class="retro-cascade-small">BREAKING</div>
+                            <RetroCascade Filled="false" />
+                        </div>
                     </div>
-                    <div class="retro-cascade-pair" style="opacity:0.22;">
-                        <div class="retro-cascade-small">BREAKING</div>
-                        <RetroCascade Filled="false" />
-                    </div>
-                    <div class="retro-cascade-pair" style="opacity:1;">
-                        <div class="retro-cascade-small">BREAKING</div>
-                        <RetroCascade Filled="true" />
-                    </div>
-                    <div class="retro-cascade-pair" style="opacity:0.22;">
-                        <div class="retro-cascade-small">BREAKING</div>
-                        <RetroCascade Filled="false" />
-                    </div>
-                    <div class="retro-cascade-pair" style="opacity:0.10;">
-                        <div class="retro-cascade-small">BREAKING</div>
-                        <RetroCascade Filled="false" />
-                    </div>
-                </div>
-            </RetroWindow>
+                </RetroWindow>
+            }
         </section>
 
-        @* RIGHT — sidebar dividido *@
-        <section style="grid-column: span 2;" class="min-h-0">
-            <RetroSidebar />
+        @* RIGHT *@
+        <section style="grid-column: span 2;" class="min-h-0 flex flex-col gap-[5px]">
+            @{
+                var rightTop = WinSvc.Windows.FirstOrDefault(w => w.Zone == DockZone.RightTop);
+                var rightBot = WinSvc.Windows.FirstOrDefault(w => w.Zone == DockZone.RightBottom);
+            }
+
+            @* TOP *@
+            <div class="flex-1 min-h-0">
+                @if (rightTop is not null)
+                {
+                    <RetroWindow Title="@rightTop.Title" Class="h-full" BodyClass="overflow-y-auto h-full">
+                        <p class="text-[9px] opacity-40">// @rightTop.Title</p>
+                    </RetroWindow>
+                }
+                else
+                {
+                    <div class="retro-window h-full flex items-center justify-center">
+                        <div class="retro-circle"></div>
+                    </div>
+                }
+            </div>
+
+            @* BOTTOM *@
+            <div class="flex-1 min-h-0">
+                @if (rightBot is not null)
+                {
+                    <RetroWindow Title="@rightBot.Title" Class="h-full" BodyClass="overflow-y-auto h-full">
+                        <p class="text-[9px] opacity-40">// @rightBot.Title</p>
+                    </RetroWindow>
+                }
+                else
+                {
+                    <div class="retro-window h-full">
+                        <div class="retro-kanji-block h-full">
+                            <span>ポ</span>
+                            <span>ー</span>
+                            <span>タ</span>
+                            <span>ル</span>
+                        </div>
+                    </div>
+                }
+            </div>
+
         </section>
+
+        @* WindowManager — maneja flotantes y overlay de drag *@
+        <WindowManager @ref="_winManager" />
 
     </main>
 
-    @* BOTTOM STATUS BAR — igual que la foto *@
     <footer class="retro-bottombar">
         <div class="retro-checker"></div>
         <NavLink href="" Match="NavLinkMatch.All" class="retro-bottom-item" ActiveClass="retro-bottom-active">ポータル</NavLink>
@@ -63,3 +135,13 @@
     </footer>
 
 </div>
+
+@code {
+    private WindowManager? _winManager;
+
+    protected override void OnInitialized()
+        => WinSvc.OnChange += StateHasChanged;
+
+    public void Dispose()
+        => WinSvc.OnChange -= StateHasChanged;
+}

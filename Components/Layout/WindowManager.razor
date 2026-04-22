@@ -1,10 +1,16 @@
 ﻿@inject WindowService WinSvc
 @implements IDisposable
 
-@* Solo flotantes — Left lo maneja MainLayout *@
+@* ✅ Flotantes *@
 @foreach (var win in WinSvc.Windows.Where(w => w.IsFloating))
 {
-    <FloatingWindow Model="win" OnDragComplete="HandleDragComplete" />
+    <FloatingWindow @key="win.Id" Model="win" OnDragComplete="HandleDragComplete" />
+}
+
+@* ✅ Docked Left también aquí *@
+@foreach (var win in WinSvc.Windows.Where(w => !w.IsFloating && w.Zone == DockZone.Left))
+{
+    <FloatingWindow @key="win.Id" Model="win" OnDragComplete="HandleDragComplete" />
 }
 
 @code {

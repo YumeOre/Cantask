@@ -5,9 +5,7 @@
 <div class="cantask-shell crt">
 
     <NavBar />
-    <div style="position: absolute; inset: 0; pointer-events: none; z-index: 500;">
-        <WindowManager />
-    </div>
+    
 
     <main class="cantask-grid" style="position:relative;">
 
@@ -24,11 +22,7 @@
                     .Where(w => w.Zone == DockZone.Left)
                     .ToList();
             }
-            @for (int i = 0; i < leftWins.Count; i++)
-            {
-                var win = leftWins[i];
-                <FloatingWindow Model="win" OnDragComplete="HandleDragComplete" />
-            }
+           
 
         </section>
 
